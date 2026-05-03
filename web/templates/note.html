@@ -1,0 +1,13 @@
+{{define "note.html"}}{{template "layout" .}}{{end}}
+
+{{define "title"}}Note · {{fmtDate .Day}}{{end}}
+
+{{define "main"}}
+  <header class="page-header">
+    <h1>Note · {{fmtDate .Day}}</h1>
+  </header>
+  <form method="post" action="/notes/{{fmtISO .Day}}">
+    <textarea name="body" rows="10" autofocus>{{.Note.Body}}</textarea>
+    <button type="submit">Save</button>
+  </form>
+{{end}}

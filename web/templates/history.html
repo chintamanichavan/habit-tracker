@@ -1,0 +1,25 @@
+{{define "history.html"}}{{template "layout" .}}{{end}}
+
+{{define "title"}}History{{end}}
+
+{{define "main"}}
+  <header class="page-header">
+    <h1>History</h1>
+    <div class="subtitle">Last 30 days</div>
+  </header>
+
+  {{if .Habits}}
+    {{range .Habits}}
+      <div class="history-row">
+        <div class="history-name">{{.Habit.Name}}</div>
+        <div class="history-cells">
+          {{range .Days}}
+            <span class="cell{{if .Checked}} on{{end}}" title="{{fmtISO .Day}}"></span>
+          {{end}}
+        </div>
+      </div>
+    {{end}}
+  {{else}}
+    <p class="empty">No habits to show. <a href="/habits">Add one</a>.</p>
+  {{end}}
+{{end}}

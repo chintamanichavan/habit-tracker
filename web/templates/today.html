@@ -1,0 +1,72 @@
+{{define "today.html"}}{{template "layout" .}}{{end}}
+
+{{define "title"}}{{fmtDate .Today}}{{end}}
+
+{{define "main"}}
+  <header class="today-header">
+    <span class="weekday">{{.Weekday}}</span>
+    <h1>{{fmtDate .Today}}</h1>
+    {{if gt .Total 0}}
+      <p class="progress"><strong>{{.Done}}</strong> of {{.Total}} done</p>
+    {{end}}
+  </header>
+
+  {{if .Morning}}
+  <section class="routine">
+    <h2>Morning</h2>
+    <ul class="habit-list">
+      {{range .Morning}}{{template "habit_row" .}}{{end}}
+    </ul>
+  </section>
+  {{end}}
+
+  {{if .Anytime}}
+  <section class="routine">
+    <h2>Anytime</h2>
+    <ul class="habit-list">
+      {{range .Anytime}}{{template "habit_row" .}}{{end}}
+    </ul>
+  </section>
+  {{end}}
+
+  {{if .Evening}}
+  <section class="routine">
+    <h2>Evening</h2>
+    <ul class="habit-list">
+      {{range .Evening}}{{template "habit_row" .}}{{end}}
+    </ul>
+  </section>
+  {{end}}
+
+  {{if eq .Total 0}}
+    <p class="empty">No habits yet. <a href="/habits">Add one</a> to get started.</p>
+  {{end}}
+
+  <section class="note">
+    <h2>Today's note</h2>
+    <form hx-post="/notes/{{fmtISO .Today}}" hx-target="#note-status" hx-swap="innerHTML">
+      <textarea name="body" rows="3" placeholder="Anything worth remembering about today?">{{.NoteForm}}</textarea>
+      <div class="note-actions">
+        <button type="submit" class="primary">Save</button>
+        <span id="note-status"></span>
+      </div>
+    </form>
+  </section>
+{{end}}
+
+{{define "habit_row"}}
+<li id="habit-{{.Habit.ID}}" class="habit{{if .CheckedIn}} checked{{end}}">
+  <form hx-post="/check-ins" hx-target="#habit-{{.Habit.ID}}" hx-swap="outerHTML">
+    <input type="hidden" name="habit_id" value="{{.Habit.ID}}">
+    <button type="submit" class="tick" aria-label="Toggle check-in">{{if .CheckedIn}}✓{{end}}</button>
+  </form>
+  <div class="habit-body">
+    <span class="habit-name">{{.Habit.Name}}</span>
+    {{if eq (printf "%s" .Habit.Cadence) "weekly"}}
+      <span class="habit-meta">{{.Weekly}} of {{.Habit.TargetCount}} this week</span>
+    {{else if gt .Streak 0}}
+      <span class="habit-meta">{{.Streak}}-day streak</span>
+    {{end}}
+  </div>
+</li>
+{{end}}

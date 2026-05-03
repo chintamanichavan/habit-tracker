@@ -1,0 +1,378 @@
+/* ── Palette ─────────────────────────────────────────────
+   Deeply minimal, dark, single warm accent.
+   Inspired by Streaks / Stoic — paper-on-ink mood at night.            */
+:root {
+  --bg:        #0c0c0e;
+  --bg-2:      #131316;
+  --text:      #ece8e1;        /* warm off-white */
+  --muted:     #6e6963;
+  --hairline:  rgba(236, 232, 225, 0.08);
+  --accent:    #e8b04b;        /* warm gold for completion + flame */
+  --accent-ink:#1a1408;
+  --container: 560px;
+}
+
+/* ── Reset ─────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter",
+               system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { opacity: 0.85; }
+
+/* ── Nav ─────────────────────────────────────────────────
+   Hairline-only — no fill, no chrome. Letters do the work.            */
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 2.25rem;
+  padding: 1.25rem 1rem 1rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.nav a {
+  color: var(--muted);
+  font-weight: 500;
+}
+.nav a:hover { color: var(--text); opacity: 1; }
+
+/* ── Container ─────────────────────────────────────────── */
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0.5rem 1.25rem 6rem;
+}
+
+/* ── Today header ──────────────────────────────────────── */
+.today-header {
+  text-align: center;
+  padding: 2rem 0 2.25rem;
+}
+.today-header .weekday {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+.today-header h1 {
+  margin: 0;
+  font-size: 2.6rem;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+.today-header .progress {
+  margin-top: 0.85rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.today-header .progress strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ── Section heading ───────────────────────────────────── */
+.routine {
+  margin: 1.75rem 0 0;
+}
+.routine h2 {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+  padding: 0 0.25rem;
+}
+
+/* ── Habit row ─────────────────────────────────────────── */
+.habit-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.habit {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 0.25rem;
+  border-bottom: 1px solid var(--hairline);
+  transition: opacity 120ms ease;
+}
+.habit:last-child { border-bottom: 0; }
+.habit form { margin: 0; line-height: 0; }
+
+/* The big circle is the only interactive thing.
+   Streaks-style: thin ring when empty, fully filled when done.        */
+.tick {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid var(--hairline);
+  background: transparent;
+  color: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0;
+  transition: all 160ms ease;
+}
+.tick:hover { border-color: var(--muted); }
+.habit.checked .tick {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.habit.checked .habit-name { color: var(--muted); }
+
+.habit-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+.habit-name {
+  font-weight: 500;
+  font-size: 1.02rem;
+  letter-spacing: -0.005em;
+  transition: color 160ms ease;
+}
+.habit-meta {
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+}
+.habit.checked .habit-meta { color: var(--accent); opacity: 0.85; }
+
+/* ── Note ──────────────────────────────────────────────── */
+.note {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--hairline);
+}
+.note h2 {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 0.6rem;
+}
+textarea {
+  width: 100%;
+  background: transparent;
+  color: var(--text);
+  border: 0;
+  border-bottom: 1px solid var(--hairline);
+  padding: 0.5rem 0;
+  font: inherit;
+  resize: none;
+  outline: none;
+  transition: border-color 160ms ease;
+}
+textarea:focus { border-bottom-color: var(--muted); }
+textarea::placeholder { color: var(--muted); opacity: 0.6; }
+
+.note-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 0.75rem;
+}
+.saved {
+  color: var(--accent);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+}
+
+/* ── Buttons ──────────────────────────────────────────── */
+button {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 160ms ease;
+}
+button:hover { border-color: var(--muted); }
+button.primary {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+button.primary:hover { opacity: 0.9; }
+button.ghost { color: var(--muted); }
+button.ghost:hover { color: var(--text); }
+
+/* ── History ──────────────────────────────────────────── */
+.page-header {
+  text-align: center;
+  padding: 2rem 0 1.75rem;
+}
+.page-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+}
+.page-header .subtitle {
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-top: 0.45rem;
+}
+
+.history-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.history-row:last-child { border-bottom: 0; }
+.history-name { font-weight: 500; font-size: 0.95rem; }
+.history-cells {
+  display: grid;
+  grid-template-columns: repeat(30, 1fr);
+  gap: 4px;
+  align-items: center;
+}
+/* Every 7th cell gets a tiny left margin to suggest week boundaries. */
+.history-cells .cell:nth-child(7n+1) { margin-left: 4px; }
+.history-cells .cell:first-child { margin-left: 0; }
+.cell {
+  aspect-ratio: 1;
+  width: 100%;
+  border-radius: 50%;
+  background: var(--hairline);
+  transition: background 160ms ease;
+}
+.cell.on { background: var(--accent); }
+
+/* ── Habits page ──────────────────────────────────────── */
+.section-label {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 0.85rem;
+}
+
+.habit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.habit-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.habit-form input,
+.habit-form select {
+  background: transparent;
+  color: var(--text);
+  border: 0;
+  border-bottom: 1px solid var(--hairline);
+  padding: 0.5rem 0;
+  letter-spacing: normal;
+  text-transform: none;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 160ms ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.habit-form input:focus,
+.habit-form select:focus { border-bottom-color: var(--muted); }
+
+/* Custom select arrow */
+.habit-form select {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6' fill='none' stroke='%236e6963' stroke-width='1.5'><path d='M1 1l4 4 4-4'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.25rem center;
+  background-size: 10px 6px;
+  padding-right: 1.5rem;
+}
+
+.habit-form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.habit-form .actions { margin-top: 0.5rem; }
+
+.habit-admin-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.habit-admin {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 0.25rem;
+  border-bottom: 1px solid var(--hairline);
+  gap: 0.75rem;
+}
+.habit-admin:last-child { border-bottom: 0; }
+.habit-admin.archived { opacity: 0.45; }
+.habit-admin-name { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
+.habit-admin-name strong { font-weight: 500; }
+.habit-admin-tags { color: var(--muted); font-size: 0.74rem; letter-spacing: 0.06em; }
+.habit-admin-tags .archived-tag { color: var(--accent); }
+
+.error {
+  color: #ff8b7a;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+  padding: 2rem 0;
+  letter-spacing: 0.02em;
+}
+
+/* ── Mobile ───────────────────────────────────────────── */
+@media (max-width: 480px) {
+  body { font-size: 16px; }
+  .container { padding: 0 1.1rem 5rem; }
+  .today-header { padding: 1.5rem 0 1.75rem; }
+  .today-header h1 { font-size: 2.25rem; }
+  .nav { gap: 1.6rem; }
+  .habit-form .row { grid-template-columns: 1fr; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

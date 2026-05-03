@@ -1,0 +1,17 @@
+# Plain HTTP on the tailnet — Tailscale itself encrypts traffic between nodes.
+# When you add more services, give each its own site block here.
+
+:80 {
+    encode zstd gzip
+
+    log {
+        output stderr
+        format console
+    }
+
+    reverse_proxy tracker:8080 {
+        health_uri /healthz
+        health_interval 30s
+        health_timeout 5s
+    }
+}

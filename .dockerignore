@@ -1,0 +1,11 @@
+.git
+.gitignore
+.dockerignore
+*.db
+*.db-*
+README.md
+Dockerfile
+docker-compose.yml
+Caddyfile
+.DS_Store
+.env

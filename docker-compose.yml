@@ -1,0 +1,42 @@
+services:
+  tracker:
+    build: .
+    image: habit-tracker:latest
+    container_name: habit-tracker
+    restart: unless-stopped
+    environment:
+      - DB_PATH=/data/tracker.db
+      - ADDR=:8080
+      - TZ=America/Los_Angeles   # change to your timezone
+    volumes:
+      - tracker-data:/data
+    expose:
+      - "8080"
+    networks:
+      - web
+
+  caddy:
+    image: caddy:2
+    container_name: habit-tracker-caddy
+    restart: unless-stopped
+    # Bind to the Tailscale interface only. Find your tailnet IP with `tailscale ip -4`.
+    # Replace 100.x.y.z with that address. Listening on it (rather than 0.0.0.0) means
+    # the service is unreachable from anything not on your tailnet.
+    ports:
+      - "100.x.y.z:80:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks:
+      - web
+    depends_on:
+      - tracker
+
+networks:
+  web:
+
+volumes:
+  tracker-data:
+  caddy-data:
+  caddy-config:

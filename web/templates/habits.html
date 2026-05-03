@@ -1,0 +1,66 @@
+{{define "habits.html"}}{{template "layout" .}}{{end}}
+
+{{define "title"}}Habits{{end}}
+
+{{define "main"}}
+  <header class="page-header">
+    <h1>Habits</h1>
+  </header>
+
+  <div class="section-label">New habit</div>
+  <form method="post" action="/habits" class="habit-form">
+    <label>
+      Name
+      <input type="text" name="name" required value="{{.Form.Name}}" autocomplete="off" placeholder="e.g. Read 30 min">
+      {{with index .Errors "name"}}<small class="error">{{.}}</small>{{end}}
+    </label>
+    <div class="row">
+      <label>
+        Routine
+        <select name="routine">
+          <option value="morning" {{if eq .Form.Routine "morning"}}selected{{end}}>Morning</option>
+          <option value="anytime" {{if eq .Form.Routine "anytime"}}selected{{end}}>Anytime</option>
+          <option value="evening" {{if eq .Form.Routine "evening"}}selected{{end}}>Evening</option>
+        </select>
+      </label>
+      <label>
+        Cadence
+        <select name="cadence">
+          <option value="daily" {{if eq .Form.Cadence "daily"}}selected{{end}}>Daily</option>
+          <option value="weekly" {{if eq .Form.Cadence "weekly"}}selected{{end}}>Weekly</option>
+        </select>
+      </label>
+    </div>
+    <label>
+      Weekly target
+      <input type="number" name="target_count" min="1" max="7" value="{{.Form.TargetCount}}">
+    </label>
+    <div class="actions">
+      <button type="submit" class="primary">Add habit</button>
+    </div>
+  </form>
+
+  <div class="section-label">All habits</div>
+  {{if .Habits}}
+  <ul class="habit-admin-list">
+    {{range .Habits}}
+      <li class="habit-admin{{if .Archived}} archived{{end}}">
+        <div class="habit-admin-name">
+          <strong>{{.Name}}</strong>
+          <span class="habit-admin-tags">
+            {{.Routine}} · {{.Cadence}}{{if eq (printf "%s" .Cadence) "weekly"}} ×{{.TargetCount}}{{end}}
+            {{if .Archived}} · <span class="archived-tag">archived</span>{{end}}
+          </span>
+        </div>
+        {{if not .Archived}}
+        <form method="post" action="/habits/{{.ID}}/archive" onsubmit="return confirm('Archive this habit? History is preserved.');">
+          <button type="submit" class="ghost">Archive</button>
+        </form>
+        {{end}}
+      </li>
+    {{end}}
+  </ul>
+  {{else}}
+  <p class="empty">No habits yet.</p>
+  {{end}}
+{{end}}
